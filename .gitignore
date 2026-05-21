@@ -209,5 +209,8 @@ __marimo__/
 # Models
 models/*.pkl
 
+# Artifacts
+artifacts/
+
 # Other files to ignore
 Final Notebook Structure.txt

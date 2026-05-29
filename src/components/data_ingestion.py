@@ -27,6 +27,7 @@ class DataIngestion:
             os.makedirs(os.path.dirname(self.ingestion_config.train_data_path), exist_ok=True)
 
             df.to_csv(self.ingestion_config.raw_data_path, index=False, header=True)
+
             logging.info("Train test split initiated")
 
             train_set, test_set = train_test_split(df, test_size=0.2, random_state=42, stratify=(df["Diabetes_012"] != 0).astype(int))
@@ -44,8 +45,14 @@ if __name__ == "__main__":
     train_data, test_data = obj.initiate_data_ingestion()
 
     data_transformation = DataTransformation()
-    train_arr, test_arr, _ = data_transformation.initiate_data_transformation(train_data, test_data)
+    main_train_arr, main_test_arr, chol_train_arr, chol_test_arr, _, _ = data_transformation.initiate_data_transformation(train_data, test_data)
 
     model_trainer = ModelTrainer()
-    precision, recall, roc_auc = model_trainer.initiate_model_trainer(train_arr, test_arr)
-    print(f"Precision: {precision}, Recall: {recall}, ROC AUC: {roc_auc}")
+    main_precision, main_recall, main_roc_auc, chol_precision, chol_recall, chol_roc_auc = model_trainer.initiate_model_trainer(main_train_arr, main_test_arr, chol_train_arr, chol_test_arr)
+    print("Main Model Performance:")
+    print(f"Precision: {main_precision}, Recall: {main_recall}, ROC AUC: {main_roc_auc}")
+    print("=" * 35)
+    print("\n")
+
+    print("Cholesterol Model Performance:")
+    print(f"Precision: {chol_precision}, Recall: {chol_recall}, ROC-AUC: {chol_roc_auc}")

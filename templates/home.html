@@ -1,0 +1,381 @@
+<html>
+  <body>
+    <div class="login">
+      <h1>Diabetes Risk Prediction</h1>
+
+      <form action="{{url_for('predict_datapoint')}}" method="post">
+        <h1>
+          <legend>Diabetes Risk Prediction</legend>
+        </h1>
+        <div class="mb-3">
+          <label class="form-label">Systolic Blood Pressure (Top Number)</label>
+          <input
+            class="form-control"
+            type="number"
+            name="systolic_bp"
+            placeholder="Enter Systolic Blood Pressure"
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <label class="form-label"
+            >Diastolic Blood Pressure (Bottom Number)</label
+          >
+          <input
+            class="form-control"
+            type="number"
+            name="diastolic_bp"
+            placeholder="Enter Diastolic Blood Pressure"
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <label class="form-label"
+            >Have you ever been told by a doctor that you have high
+            cholesterol?></label
+          >
+          <select
+            class="form-control"
+            name="high_chol"
+            placeholder="Select an option"
+            required
+          >
+            <option class="placeholder" selected disabled value="">
+              Select an option
+            </option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+            <option value="Unsure">Unsure</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label"
+            >Have you had a cholesterol check in the past 5 years?</label
+          >
+          <select
+            class="form-control"
+            name="chol_check"
+            placeholder="Select an option"
+            required
+          >
+            <option class="placeholder" selected disabled value="">
+              Select an option
+            </option>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Height in Inches</label>
+          <input
+            class="form-control"
+            type="number"
+            name="height"
+            placeholder="Enter your height in inches"
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Weight in Pounds</label>
+          <input
+            class="form-control"
+            type="number"
+            name="weight"
+            placeholder="Enter your weight in pounds"
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <label class="form-label"
+            >Have you smoked at least 100 cigarettes in your life? (5 packs =
+            100 cigarettes)</label
+          >
+          <select
+            class="form-control"
+            name="smoker"
+            placeholder="Select an option"
+            required
+          >
+            <option class="placeholder" selected disabled value="">
+              Select an option
+            </option>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Have you ever had a stroke?</label>
+          <select
+            class="form-control"
+            name="stroke"
+            placeholder="Select an option"
+            required
+          >
+            <option class="placeholder" selected disabled value="">
+              Select an option
+            </option>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label"
+            >Have you ever been diagnosed with heart disease or experienced a
+            heart attack?</label
+          >
+          <select
+            class="form-control"
+            name="heart_disease_or_attack"
+            placeholder="Select an option"
+            required
+          >
+            <option class="placeholder" selected disabled value="">
+              Select an option
+            </option>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label"
+            >Have you had any physical activity in the past 30 days? (Not
+            including work)</label
+          >
+          <select
+            class="form-control"
+            name="physical_activity"
+            placeholder="Select an option"
+            required
+          >
+            <option class="placeholder" selected disabled value="">
+              Select an option
+            </option>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label"
+            >Do you eat fruit one or more times a day?</label
+          >
+          <select
+            class="form-control"
+            name="fruits"
+            placeholder="Select an option"
+            required
+          >
+            <option class="placeholder" selected disabled value="">
+              Select an option
+            </option>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label"
+            >Do you eat vegetables one or more times a day?</label
+          >
+          <select
+            class="form-control"
+            name="veggies"
+            placeholder="Select an option"
+            required
+          >
+            <option class="placeholder" selected disabled value="">
+              Select an option
+            </option>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label"
+            >Are you a heavy drinker? (More than 14 drinks per week for men,
+            more than 7 for women)</label
+          >
+          <select
+            class="form-control"
+            name="heavy_alc_consumption"
+            placeholder="Select an option"
+            required
+          >
+            <option class="placeholder" selected disabled value="">
+              Select an option
+            </option>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Do you have health insurance?</label>
+          <select
+            class="form-control"
+            name="healthcare"
+            placeholder="Select an option"
+            required
+          >
+            <option class="placeholder" selected disabled value="">
+              Select an option
+            </option>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label"
+            >Was there a time in the last 12 months where you needed to see a
+            doctor but couldn't due to cost?</label
+          >
+          <select
+            class="form-control"
+            name="doctor_no_care"
+            placeholder="Select an option"
+            required
+          >
+            <option class="placeholder" selected disabled value="">
+              Select an option
+            </option>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Rate your general health (1-5):</label>
+          <select
+            class="form-control"
+            name="general_health"
+            placeholder="Select an option"
+            required
+          >
+            <option class="placeholder" selected disabled value="">
+              Select an option
+            </option>
+            <option value="1">5 - Excellent</option>
+            <option value="2">4 - Very Good</option>
+            <option value="3">3 - Good</option>
+            <option value="4">2 - Fair</option>
+            <option value="5">1 - Poor</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label"
+            >How many days have you experienced symptoms of stress, depression,
+            and/or emotional problems in the past 30 days?</label
+          >
+          <input
+            class="form-control"
+            type="number"
+            name="mental_health"
+            placeholder="Enter number of days (0-30)"
+            min="0"
+            max="30"
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <label class="form-label"
+            >How many days have you experienced illness or injury in the past 30
+            days?</label
+          >
+          <input
+            class="form-control"
+            type="number"
+            name="physical_health"
+            placeholder="Enter number of days (0-30)"
+            min="0"
+            max="30"
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <label class="form-label"
+            >Do you have difficulty walking or climbing stairs?</label
+          >
+          <select
+            class="form-control"
+            name="diff_walk"
+            placeholder="Select an option"
+            required
+          >
+            <option class="placeholder" selected disabled value="">
+              Select an option
+            </option>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Sex</label>
+          <select
+            class="form-control"
+            name="sex"
+            placeholder="Select an option"
+            required
+          >
+            <option class="placeholder" selected disabled value="">
+              Select an option
+            </option>
+            <option value="1">Male</option>
+            <option value="0">Female</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Age</label>
+          <input
+            class="form-control"
+            type="number"
+            name="age"
+            placeholder="Enter age"
+            min="18"
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Education</label>
+          <select
+            class="form-control"
+            name="education"
+            placeholder="Select an option"
+            required
+          >
+            <option class="placeholder" selected disabled value="">
+              Select an option
+            </option>
+            <option value="1">
+              Never attended school or only kindergarten
+            </option>
+            <option value="2">Grades 1 through 8 (Elementary)</option>
+            <option value="3">Grades 9 through 11 (Some high school)</option>
+            <option value="4">Grade 12 or GED (High school graduate)</option>
+            <option value="5">
+              College 1 year to 3 years (Some college or technical school)
+            </option>
+            <option value="6">
+              College 4 years or more (College graduate)
+            </option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Income</label>
+          <input
+            class="form-control"
+            type="number"
+            name="income"
+            placeholder="Enter yearly income"
+            min="0"
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <input
+            class="btn btn-primary"
+            type="submit"
+            value="Check Diabetes Risk"
+            required
+          />
+        </div>
+      </form>
+    </div>
+    <h2>{{results}}</h2>
+  </body>
+</html>

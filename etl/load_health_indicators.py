@@ -105,7 +105,7 @@ def etl_pipeline():
         raise CustomException(e, sys)
     
     # Load health indicators data from CSV
-    df = pd.read_csv('notebook/data/diabetes_012_health_indicators_BRFSS2015.csv')
+    df = pd.read_csv('data/diabetes_012_health_indicators_BRFSS2015.csv')
     logging.info(f"Extracted {len(df)} rows from CSV.")
 
     # Remove duplicates

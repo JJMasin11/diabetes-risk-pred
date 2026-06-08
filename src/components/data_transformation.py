@@ -24,11 +24,11 @@ class DataTransformation:
         This function is responsible for data transformation on the main diabetes prediction model
         '''
         try:
-            columns = ['HighBP', 'HighChol', 'CholCheck', 'BMI', 'Smoker', 'Stroke',
-                       'HeartDiseaseorAttack', 'PhysActivity', 'Fruits', 'Veggies',
-                       'HvyAlcoholConsump', 'AnyHealthcare', 'NoDocbcCost', 'GenHlth',
-                       'MentHlth', 'PhysHlth', 'DiffWalk', 'Sex', 'Age', 'Education', 'Income',
-                       'BMI_Age']
+            columns = ['high_bp', 'high_chol', 'chol_check', 'bmi', 'smoker', 'stroke',
+                       'heart_disease_or_attack', 'phys_activity', 'fruits', 'veggies',
+                       'hvy_alcohol_consump', 'any_healthcare', 'no_doc_bc_cost', 'gen_hlth',
+                       'ment_hlth', 'phys_hlth', 'diff_walk', 'sex', 'age', 'education', 'income',
+                       'bmi_age']
 
             pipeline = Pipeline(
                 steps=[
@@ -54,12 +54,12 @@ class DataTransformation:
         This function is responsible for data transformation on the auxiliary cholesterol model
         '''
         try:
-            columns = ['HighBP', 'CholCheck', 'BMI', 'Smoker', 'Stroke',
-                       'HeartDiseaseorAttack', 'PhysActivity', 'Fruits', 'Veggies',
-                       'HvyAlcoholConsump', 'AnyHealthcare', 'NoDocbcCost', 'GenHlth',
-                       'MentHlth', 'PhysHlth', 'DiffWalk', 'Sex', 'Age', 'Education', 'Income',
-                       'BMI_Age']
-            
+            columns = ['high_bp', 'chol_check', 'bmi', 'smoker', 'stroke',
+                       'heart_disease_or_attack', 'phys_activity', 'fruits', 'veggies',
+                       'hvy_alcohol_consump', 'any_healthcare', 'no_doc_bc_cost', 'gen_hlth',
+                       'ment_hlth', 'phys_hlth', 'diff_walk', 'sex', 'age', 'education', 'income',
+                       'bmi_age']
+
             pipeline = Pipeline(
                 steps=[
                     ("scaler", StandardScaler())
@@ -70,7 +70,7 @@ class DataTransformation:
 
             preprocessor = ColumnTransformer(
                 [
-                    ("StandardScalar", pipeline, columns)
+                    ("StandardScaler", pipeline, columns)
                 ]
             )
 
@@ -87,27 +87,27 @@ class DataTransformation:
             logging.info("Read train and test data completed.")
 
             # Add BMI age interaction
-            train_df["BMI_Age"] = train_df["BMI"] * train_df["Age"]
-            test_df["BMI_Age"] = test_df["BMI"] * test_df["Age"]
+            train_df["bmi_age"] = train_df["bmi"] * train_df["age"]
+            test_df["bmi_age"] = test_df["bmi"] * test_df["age"]
 
             # Convert data from multiclass to binary
-            train_df["Diabetes_Binary"] = (train_df["Diabetes_012"] != 0).astype(int)
-            train_df.drop(columns=["Diabetes_012"], inplace=True)
+            train_df["diabetes_binary"] = (train_df["diabetes_012"] != 0).astype(int)
+            train_df.drop(columns=["diabetes_012"], inplace=True)
 
-            test_df["Diabetes_Binary"] = (test_df["Diabetes_012"] != 0).astype(int)
-            test_df.drop(columns=["Diabetes_012"], inplace=True)
+            test_df["diabetes_binary"] = (test_df["diabetes_012"] != 0).astype(int)
+            test_df.drop(columns=["diabetes_012"], inplace=True)
 
             # Create train and test data for auxiliary cholesterol model
-            chol_train_df = train_df.drop(columns=['Diabetes_Binary'])
-            chol_test_df = test_df.drop(columns=['Diabetes_Binary'])
+            chol_train_df = train_df.drop(columns=['diabetes_binary'])
+            chol_test_df = test_df.drop(columns=['diabetes_binary'])
 
             logging.info("Obtaining preprocessing object.")
 
             main_preprocessing_obj = self.get_main_data_transformer_object()
             chol_preprocessing_obj = self.get_chol_data_transformer_object()
 
-            main_target_column_name = "Diabetes_Binary"
-            chol_target_column_name = "HighChol"
+            main_target_column_name = "diabetes_binary"
+            chol_target_column_name = "high_chol"
 
             main_input_feature_train_df = train_df.drop(columns=[main_target_column_name], axis=1)
             main_target_feature_train_df = train_df[main_target_column_name]

@@ -212,5 +212,13 @@ models/*.pkl
 # Artifacts
 artifacts/
 
+# MLflow
+mlflow.db
+mlartifacts/
+
+# CatBoost
+catboost_info/
+
 # Other files to ignore
 Final Notebook Structure.txt
+roadmap.md

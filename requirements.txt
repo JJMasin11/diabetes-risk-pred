@@ -9,4 +9,8 @@ xgboost
 lightgbm
 joblib
 flask
+dotenv
+psycopg2-binary
+sqlalchemy
+mlflow
 -e .

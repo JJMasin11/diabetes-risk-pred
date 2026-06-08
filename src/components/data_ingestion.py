@@ -5,6 +5,8 @@ from src.logger import logging
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from dataclasses import dataclass
+from sqlalchemy import create_engine
+from dotenv import load_dotenv
 from src.components.data_transformation import DataTransformation, DataTransformationConfig
 from src.components.model_trainer import ModelTrainer, ModelTrainerConfig
 
@@ -20,8 +22,16 @@ class DataIngestion:
 
     def initiate_data_ingestion(self):
         logging.info("Entered the data ingestion method or component")
+        load_dotenv()
+
         try:
-            df = pd.read_csv("notebook\data\diabetes_012_health_indicators_BRFSS2015.csv")
+            # Connect to PostgreSQL database and read the data into a DataFrame
+            engine = create_engine(f"postgresql+psycopg2://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}")
+            query = "SELECT * FROM health_indicators;"
+
+            df = pd.read_sql(query, engine)
+            df.drop(columns=['id'], inplace=True)  # Drop the 'id' column if it exists
+
             logging.info("Read the dataset as dataframe")
 
             os.makedirs(os.path.dirname(self.ingestion_config.train_data_path), exist_ok=True)
@@ -30,7 +40,7 @@ class DataIngestion:
 
             logging.info("Train test split initiated")
 
-            train_set, test_set = train_test_split(df, test_size=0.2, random_state=42, stratify=(df["Diabetes_012"] != 0).astype(int))
+            train_set, test_set = train_test_split(df, test_size=0.2, random_state=42, stratify=(df["diabetes_012"] != 0).astype(int))
             train_set.to_csv(self.ingestion_config.train_data_path, index=False, header=True)
             test_set.to_csv(self.ingestion_config.test_data_path, index=False, header=True)
             logging.info("Ingestion of the data is completed")

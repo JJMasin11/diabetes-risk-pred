@@ -1,10 +1,10 @@
 import os
 import sys
 import pandas as pd
-from dotenv import load_dotenv
 from src.exception import CustomException
 from src.logger import logging
 from sqlalchemy import create_engine, text
+from src.utils import get_vault_secret
 
 def validate_schema(df):
     binary_columns = ['HighBP', 'HighChol', 'CholCheck', 'Smoker', 'Stroke', 'HeartDiseaseorAttack', 'PhysActivity', 'Fruits', 'Veggies', 'HvyAlcoholConsump', 'AnyHealthcare', 'NoDocbcCost', 'DiffWalk', 'Sex']
@@ -88,16 +88,14 @@ def rename_columns(df):
 
 
 def etl_pipeline():
-    # Load environment variables
-    load_dotenv()
-
     # Connect to the PostgreSQL database
-    engine = create_engine(f"postgresql+psycopg2://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}")
+    engine = create_engine(f"postgresql+psycopg2://{get_vault_secret('DB-USER')}:{get_vault_secret('DB-PASSWORD')}@{get_vault_secret('DB-HOST')}:{get_vault_secret('DB-PORT')}/{get_vault_secret('DB-NAME')}")
     
     # Check if data has already been loaded, skip if it has
     try:
         with engine.connect() as conn:
             count = conn.execute(text("SELECT COUNT(*) FROM health_indicators")).scalar()
+            print(count)
             if count > 0:
                 logging.info("Data already loaded. Skipping ETL process.")
                 return

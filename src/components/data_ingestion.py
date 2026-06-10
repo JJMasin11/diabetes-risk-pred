@@ -6,9 +6,8 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from dataclasses import dataclass
 from sqlalchemy import create_engine
-from dotenv import load_dotenv
-from src.components.data_transformation import DataTransformation, DataTransformationConfig
-from src.components.model_trainer import ModelTrainer, ModelTrainerConfig
+from src.utils import get_vault_secret
+
 
 @dataclass
 class DataIngestionConfig:
@@ -22,11 +21,10 @@ class DataIngestion:
 
     def initiate_data_ingestion(self):
         logging.info("Entered the data ingestion method or component")
-        load_dotenv()
 
         try:
             # Connect to PostgreSQL database and read the data into a DataFrame
-            engine = create_engine(f"postgresql+psycopg2://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}")
+            engine = create_engine(f"postgresql+psycopg2://{get_vault_secret('DB-USER')}:{get_vault_secret('DB-PASSWORD')}@{get_vault_secret('DB-HOST')}:{get_vault_secret('DB-PORT')}/{get_vault_secret('DB-NAME')}")
             query = "SELECT * FROM health_indicators;"
 
             df = pd.read_sql(query, engine)
@@ -49,20 +47,3 @@ class DataIngestion:
         
         except Exception as e:
             raise CustomException(e, sys)
-        
-if __name__ == "__main__":
-    obj = DataIngestion()
-    train_data, test_data = obj.initiate_data_ingestion()
-
-    data_transformation = DataTransformation()
-    main_train_arr, main_test_arr, chol_train_arr, chol_test_arr, _, _ = data_transformation.initiate_data_transformation(train_data, test_data)
-
-    model_trainer = ModelTrainer()
-    main_precision, main_recall, main_roc_auc, chol_precision, chol_recall, chol_roc_auc = model_trainer.initiate_model_trainer(main_train_arr, main_test_arr, chol_train_arr, chol_test_arr)
-    print("Main Model Performance:")
-    print(f"Precision: {main_precision}, Recall: {main_recall}, ROC AUC: {main_roc_auc}")
-    print("=" * 35)
-    print("\n")
-
-    print("Cholesterol Model Performance:")
-    print(f"Precision: {chol_precision}, Recall: {chol_recall}, ROC-AUC: {chol_roc_auc}")

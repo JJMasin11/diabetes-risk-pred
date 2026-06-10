@@ -1,7 +1,7 @@
 import sys
 import pandas as pd
 from src.exception import CustomException
-from src.utils import load_object
+from src.utils import load_from_blob
 
 class PredictPipeline:
     def __init__(self):
@@ -9,13 +9,9 @@ class PredictPipeline:
 
     def predict(self, features):
         try:
-            model_path = 'artifacts/main_model.pkl'
-            preprocessor_path = 'artifacts/main_preprocessor.pkl'
-            threshold_path = 'artifacts/threshold.pkl'
-
-            model = load_object(file_path=model_path)
-            preprocessor = load_object(file_path=preprocessor_path)
-            threshold = load_object(file_path=threshold_path)
+            model = load_from_blob('main_model.pkl')
+            preprocessor = load_from_blob('main_preprocessor.pkl')
+            threshold = load_from_blob('threshold.pkl')
 
             data_scaled = preprocessor.transform(features)
 
@@ -78,35 +74,32 @@ class CustomData:
 
     def impute_chol(self, bp, bmi, age, income, bmi_age):
         try:
-            model_path = "artifacts/chol_model.pkl"
-            preprocessor_path = "artifacts/chol_preprocessor.pkl"
-
-            model = load_object(file_path=model_path)
-            preprocessor = load_object(file_path=preprocessor_path)
+            model = load_from_blob('chol_model.pkl')
+            preprocessor = load_from_blob('chol_preprocessor.pkl')
 
         
             data_dict = {
-                    "HighBP": [bp],
-                    "CholCheck": [self.chol_check],
-                    "BMI": [bmi],
-                    "Smoker": [self.smoker],
-                    "Stroke": [self.stroke],
-                    "HeartDiseaseorAttack": [self.heart_disease_or_attack],
-                    "PhysActivity": [self.physical_activity],
-                    "Fruits": [self.fruits],
-                    "Veggies": [self.veggies],
-                    "HvyAlcoholConsump": [self.heavy_alc_consumption],
-                    "AnyHealthcare": [self.healthcare],
-                    "NoDocbcCost": [self.doctor_no_care],
-                    "GenHlth": [self.general_health],
-                    "MentHlth": [self.mental_health],
-                    "PhysHlth": [self.physical_health],
-                    "DiffWalk": [self.diff_walk],
-                    "Sex": [self.sex],
-                    "Age": [age],
-                    "Education": [self.education],
-                    "Income": [income],
-                    "BMI_Age": [bmi_age]
+                    "high_bp": [bp],
+                    "chol_check": [self.chol_check],
+                    "bmi": [bmi],
+                    "smoker": [self.smoker],
+                    "stroke": [self.stroke],
+                    "heart_disease_or_attack": [self.heart_disease_or_attack],
+                    "phys_activity": [self.physical_activity],
+                    "fruits": [self.fruits],
+                    "veggies": [self.veggies],
+                    "hvy_alcohol_consump": [self.heavy_alc_consumption],
+                    "any_healthcare": [self.healthcare],
+                    "no_doc_bc_cost": [self.doctor_no_care],
+                    "gen_hlth": [self.general_health],
+                    "ment_hlth": [self.mental_health],
+                    "phys_hlth": [self.physical_health],
+                    "diff_walk": [self.diff_walk],
+                    "sex": [self.sex],
+                    "age": [age],
+                    "education": [self.education],
+                    "income": [income],
+                    "bmi_age": [bmi_age]
                 }
             
             data = pd.DataFrame(data_dict)
@@ -202,28 +195,28 @@ class CustomData:
             high_bp, high_chol, bmi, age_cat, income_cat, bmi_age = self.preprocess()
 
             custom_data_input_dict = {
-                "HighBP": [high_bp],
-                "HighChol": [high_chol],
-                "CholCheck": [self.chol_check],
-                "BMI": [bmi],
-                "Smoker": [self.smoker],
-                "Stroke": [self.stroke],
-                "HeartDiseaseorAttack": [self.heart_disease_or_attack],
-                "PhysActivity": [self.physical_activity],
-                "Fruits": [self.fruits],
-                "Veggies": [self.veggies],
-                "HvyAlcoholConsump": [self.heavy_alc_consumption],
-                "AnyHealthcare": [self.healthcare],
-                "NoDocbcCost": [self.doctor_no_care],
-                "GenHlth": [self.general_health],
-                "MentHlth": [self.mental_health],
-                "PhysHlth": [self.physical_health],
-                "DiffWalk": [self.diff_walk],
-                "Sex": [self.sex],
-                "Age": [age_cat],
-                "Education": [self.education],
-                "Income": [income_cat],
-                "BMI_Age": [bmi_age]
+                "high_bp": [high_bp],
+                "high_chol": [high_chol],
+                "chol_check": [self.chol_check],
+                "bmi": [bmi],
+                "smoker": [self.smoker],
+                "stroke": [self.stroke],
+                "heart_disease_or_attack": [self.heart_disease_or_attack],
+                "phys_activity": [self.physical_activity],
+                "fruits": [self.fruits],
+                "veggies": [self.veggies],
+                "hvy_alcohol_consump": [self.heavy_alc_consumption],
+                "any_healthcare": [self.healthcare],
+                "no_doc_bc_cost": [self.doctor_no_care],
+                "gen_hlth": [self.general_health],
+                "ment_hlth": [self.mental_health],
+                "phys_hlth": [self.physical_health],
+                "diff_walk": [self.diff_walk],
+                "sex": [self.sex],
+                "age": [age_cat],
+                "education": [self.education],
+                "income": [income_cat],
+                "bmi_age": [bmi_age]
             }
 
             return pd.DataFrame(custom_data_input_dict)

@@ -141,5 +141,7 @@ class ModelTrainer:
                 artifact_path="chol_model_artifacts"
             )
 
+            return self.model_trainer_config.trained_main_model_file_path, self.model_trainer_config.trained_chol_model_file_path, self.model_trainer_config.threshold_file_path
+
         except Exception as e:
             raise CustomException(e, sys)

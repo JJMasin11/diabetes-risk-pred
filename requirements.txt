@@ -13,4 +13,7 @@ dotenv
 psycopg2-binary
 sqlalchemy
 mlflow
+azure-identity
+azure-keyvault-secrets
+azure-storage-blob
 -e .

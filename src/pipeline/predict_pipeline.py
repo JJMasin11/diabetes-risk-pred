@@ -115,11 +115,7 @@ class PredictPipeline:
         
     def preprocess(self, request: PredictRequest):
         # Check if user has high blood pressure
-        high_bp = 0
-        logging.info(str(request.systolic_bp))
-
-        if request.systolic_bp >= 130 or request.diastolic_bp > 80:
-            high_bp = 1
+        high_bp = self.get_high_bp(request)
 
         # Calculate BMI
         bmi = (request.weight * 703) / (request.height ** 2)
@@ -146,6 +142,11 @@ class PredictPipeline:
             high_chol, high_chol_prob = self.impute_chol(request, high_bp, bmi, age_cat, income_cat, bmi_age)
 
         return high_bp, high_chol, high_chol_prob, chol_imputed, bmi, age_cat, income_cat, bmi_age
+    
+    def get_high_bp(self, request: PredictRequest):
+        if request.systolic_bp >= 130 or request.diastolic_bp > 80:
+            return 1
+        return 0
     
     def get_age_category(self, request: PredictRequest):
         if request.age <= 24:

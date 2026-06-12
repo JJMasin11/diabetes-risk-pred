@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator, Field
 
 class PredictRequest(BaseModel):
     systolic_bp: int
@@ -17,13 +17,31 @@ class PredictRequest(BaseModel):
     healthcare: int
     doctor_no_care: int
     general_health: int
-    mental_health: int
-    physical_health: int
+    mental_health: int = Field(ge=0, le=30)
+    physical_health: int = Field(ge=0, le=30)
     diff_walk: int
     sex: int
     age: int
     education: int
     income: int
+
+    @field_validator('height')
+    def height_must_be_positive(cls, v):
+        if v <= 0:
+            raise ValueError("Height must be greater than zero.")
+        return v
+    
+    @field_validator('weight')
+    def weight_must_be_positive(cls, v):
+        if v <= 0:
+            raise ValueError("Weight must be greater than zero.")
+        return v
+    
+    @field_validator('age')
+    def age_over_eighteen(cls, v):
+        if v < 18:
+            raise ValueError("Age must be 18 or older. This model was trained on adults only.")
+        return v
 
 class PredictResponse(BaseModel):
     diabetes_risk: int

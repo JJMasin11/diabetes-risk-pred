@@ -62,7 +62,7 @@ CREATE TABLE predictions (
     high_chol SMALLINT NOT NULL,
 
     chol_imputed BOOLEAN NOT NULL,
-    chol_imputed_probability FLOAT NOT NULL,
+    chol_imputed_probability FLOAT,
 
     diabetes_prediction SMALLINT NOT NULL,
     diabetes_probability FLOAT NOT NULL

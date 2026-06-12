@@ -16,4 +16,8 @@ mlflow
 azure-identity
 azure-keyvault-secrets
 azure-storage-blob
+fastapi
+pydantic
+uvicorn
+shap
 -e .

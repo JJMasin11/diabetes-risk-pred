@@ -22,4 +22,7 @@ uvicorn
 shap
 pytest
 httpx2
+requests
+waitress
+azureml-mlflow
 -e .

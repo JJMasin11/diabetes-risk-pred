@@ -1,0 +1,49 @@
+# Virtual environment
+venv/
+.venv/
+env/
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Build / packaging
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Tests
+tests/
+
+# ETL scripts (not needed at runtime)
+etl/
+
+# Local ML artifacts
+mlruns/
+mlartifacts/
+mlflow.db
+artifacts/
+models/
+catboost_info/
+
+# Docs & repo files
+*.md
+.git/
+.gitignore
+.cursorignore
+.cursorindexingignore
+
+# IDE
+.vscode/
+.idea/
+
+# Environment & secrets
+.env
+.envrc
+
+# Cache
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/

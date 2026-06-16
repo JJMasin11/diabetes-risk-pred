@@ -8,6 +8,7 @@ from mlflow.models import infer_signature
 from src.exception import CustomException
 from src.logger import logging
 from src.utils import save_object
+from dotenv import load_dotenv
 
 @dataclass
 class ModelTrainerConfig:
@@ -19,7 +20,8 @@ class ModelTrainerConfig:
 class ModelTrainer:
     def __init__(self):
         self.model_trainer_config = ModelTrainerConfig()
-        mlflow.set_tracking_uri("http://localhost:5000")
+        load_dotenv()
+        mlflow.set_tracking_uri(os.getenv("MLFLOW_URI"))
 
     def log_to_mlflow(self, experiment, model, params, metrics, x_train, artifact_path):
         mlflow.set_experiment(experiment)

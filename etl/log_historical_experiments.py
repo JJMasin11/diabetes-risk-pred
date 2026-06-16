@@ -1,5 +1,7 @@
+import os
 import pandas as pd
 import mlflow
+from dotenv import load_dotenv
 
 def log_binary_baseline():
     df = pd.read_csv("etl/binary_baseline_results.csv")
@@ -35,7 +37,8 @@ def log_cholesterol_baseline():
 
 
 def log_experiments():
-    mlflow.set_tracking_uri("http://localhost:5000")
+    load_dotenv()
+    mlflow.set_tracking_uri(os.getenv("MLFLOW_URI"))
     log_binary_baseline()
     log_cholesterol_baseline()
 

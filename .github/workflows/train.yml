@@ -26,7 +26,7 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - run: |
-          az containerapp job start --name diabetes-pred-train --resource-group rg-diabetes-risk-pred --no-wait false
+          az containerapp job start --name diabetes-pred-train --resource-group rg-diabetes-risk-pred
 
           az containerapp update \
             --name diabetes-pred-api \

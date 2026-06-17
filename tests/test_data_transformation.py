@@ -1,4 +1,3 @@
-import pytest
 import pandas as pd
 from unittest.mock import patch
 from src.components.data_transformation import DataTransformation

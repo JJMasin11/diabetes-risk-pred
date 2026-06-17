@@ -13,7 +13,7 @@ def make_request(**kwargs):
     return request
 
 def test_valid_payload_returns_200():
-    payload = make_request(height=1, high_chol="No").model_dump()
+    payload = make_request(height=1, weight=1, age=18, high_chol="No").model_dump()
 
     mock_response = PredictResponse(diabetes_risk=1, diabetes_probability=0.72, shap_values={"bmi": 0.4})
 

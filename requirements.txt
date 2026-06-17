@@ -20,7 +20,6 @@ fastapi
 pydantic
 uvicorn
 shap
-pytest
 httpx2
 requests
 waitress

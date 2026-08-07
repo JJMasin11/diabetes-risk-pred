@@ -1,8 +1,10 @@
 import sys
+
 import pandas as pd
+from sqlalchemy import create_engine, text
+
 from src.exception import CustomException
 from src.logger import logging
-from sqlalchemy import create_engine, text
 from src.utils import get_vault_secret
 
 def validate_schema(df):
@@ -11,50 +13,50 @@ def validate_schema(df):
     # Check if binary columns contain only 0 and 1
     try:
         assert df[binary_columns].isin([0, 1]).all().all()
-    except Exception as e:
+    except AssertionError as e:
         raise CustomException(e, sys)
     
     # Check if Diabetes_012 column contains only 0, 1, and 2
     try:
         assert df['Diabetes_012'].isin([0, 1, 2]).all()
-    except Exception as e:
+    except AssertionError as e:
         raise CustomException(e, sys)
     
     # Check if GenHlth is between 1 and 5
     try:
         assert df['GenHlth'].between(1, 5).all()
-    except Exception as e:
+    except AssertionError as e:
         raise CustomException(e, sys)
     
     # Check if MentHlth and PhysHlth are between 0 and 30
     try:
         assert df['MentHlth'].between(0, 30).all()
         assert df['PhysHlth'].between(0, 30).all()
-    except Exception as e:
+    except AssertionError as e:
         raise CustomException(e, sys)
     
     # Check if Age is between 1 and 13
     try:
         assert df['Age'].between(1, 13).all()
-    except Exception as e:
+    except AssertionError as e:
         raise CustomException(e, sys)
     
     # Check if Education is between 1 and 6
     try:
         assert df['Education'].between(1, 6).all()
-    except Exception as e:
+    except AssertionError as e:
         raise CustomException(e, sys)
     
     # Check if Income is between 1 and 8
     try:
         assert df['Income'].between(1, 8).all()
-    except Exception as e:
+    except AssertionError as e:
         raise CustomException(e, sys)
 
     # Check if all columns are of number type
     try:
         assert len(df.select_dtypes(include=['int64', 'float64']).columns) == len(df.columns)
-    except Exception as e:
+    except AssertionError as e:
         raise CustomException(e, sys)
 
 

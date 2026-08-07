@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+
 from src.api.schemas import PredictRequest, PredictResponse
 from src.pipeline.predict_pipeline import PredictPipeline
 

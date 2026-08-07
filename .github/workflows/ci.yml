@@ -15,7 +15,7 @@ jobs:
           python-version: "3.13"
       - run: pip install -r requirements-dev.txt
       - run: pytest # Run test suite
-      - run: ruff check . # Lint
+      - run: ruff check . --fix # Lint
 
       # Build Docker images and push to ACR
       - uses: azure/docker-login@v1

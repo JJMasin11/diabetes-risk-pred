@@ -1,7 +1,8 @@
 import os
+
 import requests
-from flask import Flask, request, render_template
 from dotenv import load_dotenv
+from flask import Flask, request, render_template
 
 application = Flask(__name__)
 app = application

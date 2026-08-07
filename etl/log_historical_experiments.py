@@ -1,6 +1,7 @@
 import os
-import pandas as pd
+
 import mlflow
+import pandas as pd
 from dotenv import load_dotenv
 
 def log_binary_baseline():

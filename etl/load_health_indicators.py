@@ -2,6 +2,7 @@ import sys
 
 import pandas as pd
 from sqlalchemy import create_engine, text
+from sqlalchemy.exc import SQLAlchemyError
 
 from src.exception import CustomException
 from src.logger import logging
@@ -100,7 +101,7 @@ def etl_pipeline():
             if count > 0:
                 logging.info("Data already loaded. Skipping ETL process.")
                 return
-    except Exception as e:
+    except (SQLAlchemyError, ValueError) as e:
         raise CustomException(e, sys)
     
     # Load health indicators data from CSV
@@ -121,7 +122,7 @@ def etl_pipeline():
 
     try:
         df.to_sql('health_indicators', engine, if_exists='append', index=False)
-    except Exception as e:
+    except (SQLAlchemyError, ValueError, pd.errors.ParserError) as e:
         raise CustomException(e, sys)
     logging.info("Data loaded successfully into the database.")
 

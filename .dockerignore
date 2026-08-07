@@ -17,9 +17,6 @@ build/
 # Tests
 tests/
 
-# ETL scripts (not needed at runtime)
-etl/
-
 # Local ML artifacts
 mlruns/
 mlartifacts/

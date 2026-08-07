@@ -9,6 +9,10 @@ from azure.identity import DefaultAzureCredential
 from azure.keyvault.secrets import SecretClient
 from azure.storage.blob import BlobServiceClient
 
+load_dotenv()
+APP_ENV = os.getenv("APP_ENV", "local")
+LOCAL_MODEL_DIR = "artifacts"
+
 def save_object(file_path, obj):
     try:
         dir_path = os.path.dirname(file_path)
@@ -22,8 +26,12 @@ def save_object(file_path, obj):
         raise CustomException(e, sys)
     
 def get_vault_secret(secret_name: str) -> str:
-    # Load environment variables
-    load_dotenv()
+    if APP_ENV == "local":
+        # Key Vault names are hyphenated; .env uses underscores
+        value = os.getenv(secret_name.replace("-", "_"))
+        if value is None:
+            raise CustomException(f"Missing local env var for '{secret_name}'", sys)
+        return value
 
     # Construct vault URI
     vault_uri = f"https://{os.getenv('VAULT_NAME')}.vault.azure.net/"
@@ -43,6 +51,14 @@ def get_vault_secret(secret_name: str) -> str:
         raise CustomException(e, sys)
     
 def upload_to_blob(file_path, name: str):
+    if APP_ENV == "local":
+        os.makedirs(LOCAL_MODEL_DIR, exist_ok=True)
+        dest = os.path.join(LOCAL_MODEL_DIR, name)
+        if os.path.abspath(file_path) != os.path.abspath(dest):
+            with open(file_path, "rb") as src, open(dest, "wb") as out:
+                out.write(src.read())
+        return
+
     # Initialize connection client
     connection_string = get_vault_secret('STORAGE-CONN')
     service_client = BlobServiceClient.from_connection_string(connection_string)
@@ -63,6 +79,10 @@ def upload_to_blob(file_path, name: str):
         raise CustomException(e, sys)
     
 def load_from_blob(name: str):
+    if APP_ENV == "local":
+        with open(os.path.join(LOCAL_MODEL_DIR, name), "rb") as f:
+            return joblib.load(f)
+
     # Initialize connection client
     connection_string = get_vault_secret('STORAGE-CONN')
     service_client = BlobServiceClient.from_connection_string(connection_string)

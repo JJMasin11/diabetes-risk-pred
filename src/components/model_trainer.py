@@ -21,7 +21,10 @@ class ModelTrainer:
     def __init__(self):
         self.model_trainer_config = ModelTrainerConfig()
         load_dotenv()
-        mlflow.set_tracking_uri(os.getenv("MLFLOW_URI"))
+        if os.getenv("APP_ENV", "local") == "local":
+            mlflow.set_tracking_uri("sqlite:///mlruns/mlflow.db")
+        else:
+            mlflow.set_tracking_uri(os.getenv("MLFLOW_URI"))
 
     def log_to_mlflow(self, experiment, model, params, metrics, x_train, artifact_path):
         mlflow.set_experiment(experiment)

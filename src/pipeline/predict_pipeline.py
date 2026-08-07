@@ -1,6 +1,9 @@
 import sys
 import pandas as pd
 import shap
+from azure.core.exceptions import AzureError
+from catboost import CatBoostError
+from sqlalchemy.exc import SQLAlchemyError
 from src.exception import CustomException
 from src.logger import logging
 from src.utils import load_from_blob, get_vault_secret
@@ -109,8 +112,8 @@ class PredictPipeline:
             self.log_to_database(log_df)
 
             return PredictResponse(diabetes_risk=diabetes_risk, diabetes_probability=diabetes_probability, shap_values=top_shap)
-        
-        except Exception as e:
+
+        except (OSError, AzureError, ValueError, CatBoostError) as e:
             raise CustomException(e, sys)
         
     def preprocess(self, request: PredictRequest):
@@ -236,8 +239,8 @@ class PredictPipeline:
             chol_proba = float(proba[0][1])
 
             return parsed_pred, chol_proba
-        
-        except Exception as e:
+
+        except (OSError, AzureError, ValueError, CatBoostError) as e:
             raise CustomException(e, sys)
         
     def get_top_shap_values(self, model, data, input_data):
@@ -255,5 +258,5 @@ class PredictPipeline:
         try:
             df.to_sql('predictions', engine, if_exists='append', index=False)
 
-        except Exception as e:
+        except (SQLAlchemyError, ValueError) as e:
             raise CustomException(e, sys)

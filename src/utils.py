@@ -1,7 +1,9 @@
 import os
+import pickle
 import sys
 import joblib
 from io import BytesIO
+from azure.core.exceptions import AzureError
 from src.exception import CustomException
 from src.logger import logging
 from dotenv import load_dotenv
@@ -22,7 +24,7 @@ def save_object(file_path, obj):
         with open(file_path, "wb") as file_obj:
             joblib.dump(obj, file_obj)
 
-    except Exception as e:
+    except (OSError, pickle.PickleError) as e:
         raise CustomException(e, sys)
     
 def get_vault_secret(secret_name: str) -> str:
@@ -46,8 +48,8 @@ def get_vault_secret(secret_name: str) -> str:
         secret = client.get_secret(secret_name)
 
         return secret.value
-    
-    except Exception as e:
+
+    except AzureError as e:
         raise CustomException(e, sys)
     
 def upload_to_blob(file_path, name: str):
@@ -74,8 +76,8 @@ def upload_to_blob(file_path, name: str):
         logging.info(f"Uploading {name} to Azure Blob Storage...")
         with open(file_path, "rb") as data:
             client.upload_blob(data, overwrite=True)
-            
-    except Exception as e:
+
+    except (OSError, AzureError) as e:
         raise CustomException(e, sys)
     
 def load_from_blob(name: str):

@@ -6,6 +6,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from dataclasses import dataclass
 from sqlalchemy import create_engine
+from sqlalchemy.exc import SQLAlchemyError
 from src.utils import get_vault_secret
 
 
@@ -44,6 +45,6 @@ class DataIngestion:
             logging.info("Ingestion of the data is completed")
 
             return self.ingestion_config.train_data_path, self.ingestion_config.test_data_path
-        
-        except Exception as e:
+
+        except (SQLAlchemyError, KeyError, ValueError, OSError) as e:
             raise CustomException(e, sys)

@@ -1,9 +1,10 @@
 import os
 import sys
 from dataclasses import dataclass
-from catboost import CatBoostClassifier
+from catboost import CatBoostClassifier, CatBoostError
 from sklearn.metrics import precision_score, recall_score, roc_auc_score
 import mlflow
+from mlflow.exceptions import MlflowException
 from mlflow.models import infer_signature
 from src.exception import CustomException
 from src.logger import logging
@@ -148,5 +149,5 @@ class ModelTrainer:
 
             return self.model_trainer_config.trained_main_model_file_path, self.model_trainer_config.trained_chol_model_file_path, self.model_trainer_config.threshold_file_path
 
-        except Exception as e:
+        except (ValueError, CatBoostError, MlflowException) as e:
             raise CustomException(e, sys)

@@ -45,10 +45,10 @@ class DataTransformation:
             )
 
             return preprocessor
-        
-        except Exception as e:
+
+        except (ValueError, TypeError) as e:
             raise CustomException(e, sys)
-        
+
     def get_chol_data_transformer_object(self):
         '''
         This function is responsible for data transformation on the auxiliary cholesterol model
@@ -76,9 +76,9 @@ class DataTransformation:
 
             return preprocessor
 
-        except Exception as e:
+        except (ValueError, TypeError) as e:
             raise CustomException(e, sys)
-        
+
     def initiate_data_transformation(self, train_path, test_path):
         try:
             train_df = pd.read_csv(train_path)
@@ -142,5 +142,5 @@ class DataTransformation:
 
             return main_train_arr, main_test_arr, chol_train_arr, chol_test_arr, self.data_transformation_config.main_preprocessor_obj_file_path, self.data_transformation_config.chol_preprocessor_obj_file_path
 
-        except Exception as e:
+        except (OSError, pd.errors.ParserError, KeyError, ValueError) as e:
             raise CustomException(e, sys)

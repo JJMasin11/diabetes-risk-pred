@@ -86,6 +86,27 @@ def test_predict_output():
         assert response.diabetes_risk == 1
         assert response.diabetes_probability == 0.7
 
+def test_predict_applies_threshold_to_positive_class():
+    pipeline = PredictPipeline()
+
+    mock_preprocessor = MagicMock()
+    mock_preprocessor.transform.return_value = np.zeros((1, 22))
+
+    # (P(diabetes), threshold, expected risk) — asymmetric threshold catches class-column mixups
+    cases = [(0.50, 0.48, 1), (0.48, 0.48, 1), (0.47, 0.48, 0)]
+
+    for p_pos, threshold, expected in cases:
+        mock_model = MagicMock()
+        mock_model.predict_proba.return_value = np.array([[1 - p_pos, p_pos]])
+
+        with patch('src.pipeline.predict_pipeline.load_from_blob', side_effect=[mock_model, mock_preprocessor, threshold]), \
+             patch.object(pipeline, 'get_top_shap_values', return_value={}), \
+             patch.object(pipeline, 'log_to_database'):
+
+            response = pipeline.predict(make_request(high_chol="No", height=1))
+
+            assert response.diabetes_risk == expected, f"p={p_pos}, threshold={threshold}"
+
 def test_top_shap_values():
     pipeline = PredictPipeline()
 

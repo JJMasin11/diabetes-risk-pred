@@ -58,15 +58,8 @@ class PredictPipeline:
 
             # Make prediction
             proba = model.predict_proba(data_scaled)
-            pred = (proba >= threshold).astype(int)
-
-            # Translate response
-            if pred[0][0] == 0:
-                diabetes_risk = 1
-            else:
-                diabetes_risk = 0
-
             diabetes_probability = float(proba[0][1])
+            diabetes_risk = int(diabetes_probability >= threshold)
 
             # Calculate SHAP probabilities
             top_shap = self.get_top_shap_values(model, data_scaled, input_data)
